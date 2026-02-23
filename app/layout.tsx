@@ -21,6 +21,21 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Web3 Landing Page",
   description: "Connect your wallet and explore the decentralized web",
+  icons: {
+    icon: "/fav.png",
+  },
+  openGraph: {
+    title: "Web3 Landing Page",
+    description: "Connect your wallet and view your Ethereum & USDT balances in a clean, modern dashboard.",
+    images: [
+      {
+        url: "/cover.png",
+        width: 1200,
+        height: 630,
+        alt: "Web3 portfolio dashboard preview",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
