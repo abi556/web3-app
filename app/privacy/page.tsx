@@ -6,9 +6,9 @@ export default function PrivacyPage() {
     <div className="max-w-3xl mx-auto w-full">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors mb-12"
+        className="group inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors duration-200 mb-12"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
         Back to Home
       </Link>
 
@@ -110,7 +110,7 @@ export default function PrivacyPage() {
             ].map(({ name, desc }) => (
               <div
                 key={name}
-                className="border border-accent/10 rounded-xl p-5"
+                className="border border-accent/10 rounded-xl p-5 card-interactive hover:border-accent/30"
               >
                 <h3 className="font-bold text-base text-foreground mb-1">{name}</h3>
                 <p className="text-sm">{desc}</p>

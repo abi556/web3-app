@@ -110,7 +110,7 @@ export function ConnectWalletButton() {
     return (
       <div className="relative" ref={disconnectRef}>
         <button
-          onClick={() => setShowDisconnect(!showDisconnect)}
+          onClick={() => setShowDisconnect((prev) => !prev)}
           className={`flex items-center gap-2 px-5 py-2 border rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm ${
             isWrongNetwork ? "border-amber-500 text-amber-500" : "border-current"
           }`}
@@ -123,7 +123,7 @@ export function ConnectWalletButton() {
         </button>
 
         {showDisconnect && (
-          <div className="absolute right-0 mt-2 w-64 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50">
+          <div className="absolute right-0 mt-2 w-64 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50 dropdown-enter">
             {/* Wrong Network Warning */}
             {isWrongNetwork && (
               <div className="px-3 pb-2 mb-2 border-b border-accent/10">
@@ -180,7 +180,7 @@ export function ConnectWalletButton() {
       <button
         onClick={() => {
           reset();
-          setShowConnectors(!showConnectors);
+          setShowConnectors((prev) => !prev);
         }}
         disabled={isConnecting}
         className={`px-6 py-2 border border-current rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm ${
@@ -193,7 +193,7 @@ export function ConnectWalletButton() {
       </button>
 
       {showConnectors && (
-        <div className="absolute right-0 mt-2 w-56 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50">
+        <div className="absolute right-0 mt-2 w-56 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50 dropdown-enter">
           <div className="px-4 py-1 text-xs text-foreground/50 border-b border-accent/10 pb-2 mb-1">
             Choose wallet
           </div>
@@ -212,7 +212,7 @@ export function ConnectWalletButton() {
                 connect({ connector });
               }}
               disabled={isConnecting}
-              className="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-foreground/5 transition-colors disabled:opacity-50"
+              className="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-foreground/5 transition-all duration-150 disabled:opacity-50 active:bg-foreground/10"
             >
               {connector.name}
             </button>

@@ -45,9 +45,9 @@ export default function SecurityPage() {
     <div className="max-w-4xl mx-auto w-full">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors mb-12"
+        className="group inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors duration-200 mb-12"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
         Back to Home
       </Link>
 
@@ -71,8 +71,8 @@ export default function SecurityPage() {
             key={title}
             className="flex gap-6 items-start group"
           >
-            <div className="shrink-0 w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center group-hover:bg-foreground/10 transition-colors">
-              <Icon className="w-6 h-6 text-foreground/70 group-hover:text-foreground transition-colors" />
+            <div className="shrink-0 w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center group-hover:bg-accent/10 group-hover:scale-105 transition-all duration-200">
+              <Icon className="w-6 h-6 text-foreground/70 group-hover:text-accent transition-colors duration-200" />
             </div>
             <div className="pt-1">
               <div className="flex items-baseline gap-3 mb-2">
@@ -90,7 +90,7 @@ export default function SecurityPage() {
       </div>
 
       {/* Trust Banner */}
-      <div className="border border-accent/10 rounded-2xl p-8 md:p-12 text-center bg-foreground/5 mb-12">
+      <div className="border border-accent/10 rounded-2xl p-8 md:p-12 text-center bg-foreground/5 mb-12 hover:border-accent/30 transition-colors duration-300">
         <Lock className="w-8 h-8 mx-auto mb-4 text-accent" />
         <h2 className="text-xl md:text-2xl font-bold mb-3">Your keys. Your coins.</h2>
         <p className="text-foreground/50 max-w-md mx-auto leading-relaxed">

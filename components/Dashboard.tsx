@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, startTransition } from "react";
 import { useAccount, useBalance, useReadContract, useConnect } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { erc20Abi } from "viem";
@@ -9,7 +9,11 @@ import { useHydrated } from "@/lib/useHydrated";
 import { formatBalance } from "@/lib/format";
 import { USDT_ADDRESS, USDT_DECIMALS } from "@/lib/contracts";
 
-const REFETCH_INTERVAL = 30_000; // 30 seconds
+const REFETCH_INTERVAL = 30_000;
+
+const balanceSkeleton = (
+  <div className="h-6 w-24 bg-foreground/5 rounded animate-pulse ml-auto" />
+);
 
 function ActionButton({
   icon: Icon,
@@ -23,12 +27,12 @@ function ActionButton({
   return (
     <button
       onClick={onPress}
-      className="flex flex-col items-center gap-2 group p-2 hover:bg-foreground/5 rounded-lg transition-colors"
+      className="flex flex-col items-center gap-2 group p-2 rounded-lg transition-all duration-200"
     >
-      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-foreground/10 flex items-center justify-center bg-background group-hover:border-foreground/30 transition-all duration-300">
-        <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground/80 group-hover:text-foreground" />
+      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-foreground/10 flex items-center justify-center bg-background group-hover:border-accent/40 group-hover:shadow-sm group-hover:-translate-y-0.5 group-active:translate-y-0 group-active:shadow-none transition-all duration-200">
+        <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground/70 group-hover:text-foreground transition-colors duration-200" />
       </div>
-      <span className="text-xs font-medium text-foreground/60 group-hover:text-foreground transition-colors">
+      <span className="text-xs font-medium text-foreground/50 group-hover:text-foreground transition-colors duration-200">
         {label}
       </span>
     </button>
@@ -39,7 +43,7 @@ function DisconnectedState() {
   const { connect, connectors, isPending } = useConnect();
 
   return (
-    <div className="border border-dashed border-accent/20 rounded-2xl p-8 md:p-12 flex flex-col items-center justify-center text-center bg-accent/5 min-h-[300px]">
+    <div className="border border-dashed border-accent/20 rounded-2xl p-8 md:p-12 flex flex-col items-center justify-center text-center bg-accent/5 min-h-[300px] hover:border-accent/40 transition-colors duration-300">
       <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mb-6 text-accent">
         <Wallet className="w-8 h-8" />
       </div>
@@ -83,7 +87,7 @@ function BalanceError({ symbol, onRetry }: { symbol: string; onRetry?: () => voi
 function Toast({ message, visible }: { message: string; visible: boolean }) {
   if (!visible) return null;
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full shadow-lg">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full shadow-lg toast-enter">
       {message}
     </div>
   );
@@ -110,7 +114,9 @@ function useRelativeTime(timestamp: number | null) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 10_000);
+    const interval = setInterval(() => {
+      startTransition(() => setNow(Date.now()));
+    }, 10_000);
     return () => clearInterval(interval);
   }, []);
 
@@ -130,10 +136,10 @@ export function Dashboard() {
 
   const isWrongNetwork = isConnected && chain?.id !== mainnet.id;
 
-  const showToast = (msg: string) => {
+  const showToast = useCallback((msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2000);
-  };
+  }, []);
 
   const {
     data: ethBalance,
@@ -173,7 +179,7 @@ export function Dashboard() {
     refetchEth();
     refetchUsdt();
     showToast("Refreshing balances...");
-  }, [refetchEth, refetchUsdt]);
+  }, [refetchEth, refetchUsdt, showToast]);
 
   if (!mounted) return null;
 
@@ -224,7 +230,7 @@ export function Dashboard() {
       </div>
 
       {/* Asset List */}
-      <div className="bg-background border border-accent/10 rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5 dark:ring-white/5">
+      <div className="bg-background border border-accent/10 rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5 dark:ring-white/5 card-interactive">
         <div className="px-6 py-4 border-b border-accent/10 bg-foreground/5 flex justify-between items-center">
           <h3 className="font-bold text-sm uppercase tracking-wider text-foreground/70">Assets</h3>
           <div className="flex items-center gap-3">
@@ -235,17 +241,17 @@ export function Dashboard() {
             )}
             <button
               onClick={handleRefreshAll}
-              className="p-1.5 rounded-md hover:bg-foreground/10 transition-colors group"
+              className="p-1.5 rounded-md hover:bg-foreground/10 transition-colors group spin-on-click"
               aria-label="Refresh balances"
             >
-              <RefreshCcw className="w-3.5 h-3.5 text-foreground/40 group-hover:text-foreground transition-colors" />
+              <RefreshCcw className="w-3.5 h-3.5 text-foreground/40 group-hover:text-foreground transition-colors duration-150" />
             </button>
           </div>
         </div>
 
         <div className="divide-y divide-accent/5">
           {/* ETH Row */}
-          <div className="p-4 hover:bg-foreground/5 transition-colors flex items-center justify-between">
+          <div className="p-4 hover:bg-foreground/5 transition-all duration-150 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs border border-blue-500/20">
                 ETH
@@ -257,7 +263,7 @@ export function Dashboard() {
             </div>
             <div className="text-right">
               {ethLoading ? (
-                <div className="h-6 w-24 bg-foreground/5 rounded animate-pulse ml-auto" />
+                balanceSkeleton
               ) : ethError ? (
                 <BalanceError symbol="ETH" onRetry={() => refetchEth()} />
               ) : (
@@ -269,7 +275,7 @@ export function Dashboard() {
           </div>
 
           {/* USDT Row */}
-          <div className="p-4 hover:bg-foreground/5 transition-colors flex items-center justify-between">
+          <div className="p-4 hover:bg-foreground/5 transition-all duration-150 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-xs border border-emerald-500/20">
                 USDT
@@ -281,7 +287,7 @@ export function Dashboard() {
             </div>
             <div className="text-right">
               {usdtLoading ? (
-                <div className="h-6 w-24 bg-foreground/5 rounded animate-pulse ml-auto" />
+                balanceSkeleton
               ) : usdtError ? (
                 <BalanceError symbol="USDT" onRetry={() => refetchUsdt()} />
               ) : (

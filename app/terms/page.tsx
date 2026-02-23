@@ -6,9 +6,9 @@ export default function TermsPage() {
     <div className="max-w-3xl mx-auto w-full">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors mb-12"
+        className="group inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors duration-200 mb-12"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
         Back to Home
       </Link>
 

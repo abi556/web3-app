@@ -18,7 +18,7 @@
   --accent: #64748B;
 }
 
-/* Dark Mode Override using html.dark for higher specificity */
+/* Dark Mode Override */
 html.dark {
   --background: #0A0A0A;
   --foreground: #F5F5F0;
@@ -37,19 +37,85 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-heading tracking-tight;
 }
 
-/* Skip to content — accessibility */
+/* ── Accessibility ── */
 .skip-to-content {
   @apply absolute -top-12 left-4 z-9999 bg-foreground text-background px-4 py-2 text-sm font-medium rounded-b-lg transition-all focus:top-0;
 }
 
-.border-minimal {
-  @apply border border-accent/20;
-}
-
+/* ── Buttons ── */
 .btn-primary {
-  @apply bg-foreground text-background px-6 py-3 rounded-md font-medium transition-all active:scale-[0.98] border border-transparent hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  @apply bg-foreground text-background px-6 py-3 rounded-md font-medium border border-transparent
+         transition-all duration-200 ease-out
+         hover:opacity-90 hover:shadow-md hover:-translate-y-px
+         active:scale-[0.97] active:shadow-none active:translate-y-0
+         focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }
 
 .btn-outline {
-  @apply border border-foreground text-foreground px-6 py-3 rounded-md font-medium transition-all hover:bg-foreground hover:text-background focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  @apply border border-foreground text-foreground px-6 py-3 rounded-md font-medium
+         transition-all duration-200 ease-out
+         hover:bg-foreground hover:text-background hover:shadow-md hover:-translate-y-px
+         active:scale-[0.97] active:shadow-none active:translate-y-0
+         focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+/* ── Dropdown animation ── */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-enter {
+  animation: dropdown-in 0.15s ease-out both;
+}
+
+/* ── Toast animation ── */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.toast-enter {
+  animation: toast-in 0.25s ease-out both;
+}
+
+/* ── Card hover lift ── */
+.card-interactive {
+  @apply transition-all duration-200 ease-out;
+}
+
+.card-interactive:hover {
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+html.dark .card-interactive:hover {
+  box-shadow: 0 4px 20px -4px rgba(255, 255, 255, 0.04);
+}
+
+/* ── Refresh spin ── */
+@keyframes spin-once {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-on-click:active svg {
+  animation: spin-once 0.4s ease-out;
+}
+
+/* ── Shared utilities ── */
+.border-minimal {
+  @apply border border-accent/20;
 }

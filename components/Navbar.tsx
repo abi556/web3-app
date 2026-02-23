@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectWalletButton } from "@/components/ConnectWalletButton";
-import { MobileMenu } from "@/components/MobileMenu";
+
+const MobileMenu = dynamic(
+  () => import("@/components/MobileMenu").then((m) => m.MobileMenu),
+  { ssr: false }
+);
 
 const navLinks = [
   { href: "/features", label: "Features" },
@@ -12,13 +17,13 @@ const navLinks = [
   { href: "/about", label: "About" },
 ];
 
+const allMobileLinks = [
+  { href: "/", label: "Home" },
+  ...navLinks,
+];
+
 export function Navbar() {
   const pathname = usePathname();
-
-  const allMobileLinks = [
-    { href: "/", label: "Home" },
-    ...navLinks,
-  ];
 
   return (
     <nav className="w-full flex items-center justify-between py-8 px-6 md:px-12 max-w-7xl mx-auto relative">
@@ -28,7 +33,7 @@ export function Navbar() {
 
       <Link
         href="/"
-        className="hidden md:inline-block text-2xl font-heading font-bold tracking-tighter hover:opacity-80 transition-opacity"
+        className="hidden md:inline-block text-2xl font-heading font-bold tracking-tighter hover:opacity-70 transition-all duration-200"
       >
         Web3.
       </Link>
@@ -40,7 +45,7 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
-              className={`transition-colors ${
+              className={`group relative py-1 transition-colors duration-200 ${
                 isActive
                   ? "text-foreground font-semibold"
                   : "text-foreground/60 hover:text-accent"
@@ -48,6 +53,11 @@ export function Navbar() {
               aria-current={isActive ? "page" : undefined}
             >
               {label}
+              <span
+                className={`absolute -bottom-0.5 left-0 h-px bg-accent transition-all duration-200 ease-out ${
+                  isActive ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
             </Link>
           );
         })}

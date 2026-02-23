@@ -32,7 +32,7 @@ export function Footer() {
                   <Link
                     key={href}
                     href={href}
-                    className="text-sm text-foreground/60 hover:text-accent transition-colors"
+                    className="text-sm text-foreground/60 hover:text-accent hover:translate-x-0.5 transition-all duration-200"
                   >
                     {label}
                   </Link>
@@ -47,7 +47,7 @@ export function Footer() {
                   <Link
                     key={href}
                     href={href}
-                    className="text-sm text-foreground/60 hover:text-accent transition-colors"
+                    className="text-sm text-foreground/60 hover:text-accent hover:translate-x-0.5 transition-all duration-200"
                   >
                     {label}
                   </Link>
@@ -58,7 +58,7 @@ export function Footer() {
         </div>
 
         <div className="pt-6 border-t border-accent/10 text-xs text-foreground/40">
-          <p>&copy; {new Date().getFullYear()} Web3 Protocol. All rights reserved.</p>
+          <p suppressHydrationWarning>&copy; {new Date().getFullYear()} Web3 Protocol. All rights reserved.</p>
         </div>
       </div>
     </footer>

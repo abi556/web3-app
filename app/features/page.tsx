@@ -45,9 +45,9 @@ export default function FeaturesPage() {
     <div className="max-w-4xl mx-auto w-full">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors mb-12"
+        className="group inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors duration-200 mb-12"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
         Back to Home
       </Link>
 
@@ -70,10 +70,10 @@ export default function FeaturesPage() {
         {features.map(({ icon: Icon, title, description }) => (
           <div
             key={title}
-            className="group border border-accent/10 rounded-2xl p-8 hover:border-accent/30 transition-all duration-300"
+            className="group border border-accent/10 rounded-2xl p-8 hover:border-accent/30 card-interactive"
           >
-            <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center mb-5 group-hover:bg-foreground/10 transition-colors">
-              <Icon className="w-6 h-6 text-foreground/70 group-hover:text-foreground transition-colors" />
+            <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center mb-5 group-hover:bg-accent/10 transition-colors duration-200">
+              <Icon className="w-6 h-6 text-foreground/70 group-hover:text-accent transition-colors duration-200" />
             </div>
             <h3 className="text-lg font-bold mb-2">{title}</h3>
             <p className="text-sm text-foreground/50 leading-relaxed">

@@ -89,7 +89,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
           </nav>
 
           <div className="mt-auto pt-8 border-t border-accent/10">
-            <p className="text-xs text-foreground/40 text-center">
+            <p className="text-xs text-foreground/40 text-center" suppressHydrationWarning>
               &copy; {new Date().getFullYear()} Web3 Protocol
             </p>
           </div>

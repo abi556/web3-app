@@ -9,10 +9,11 @@ export function Hero() {
 
   return (
     <section className="min-h-[60vh] flex flex-col justify-center gap-6">
+      <div className="w-12 h-px bg-accent mb-2" aria-hidden="true" />
       <h1 className="text-5xl md:text-7xl font-bold max-w-3xl leading-[1.1]">
         The Future of <span className="text-accent">Web3</span> is Here.
       </h1>
-      <p className="text-xl md:text-2xl text-foreground/80 max-w-2xl font-light">
+      <p className="text-xl md:text-2xl text-foreground/70 max-w-2xl font-light leading-relaxed">
         A decentralized protocol for the next generation of finance. Secure,
         transparent, and built for everyone.
       </p>
