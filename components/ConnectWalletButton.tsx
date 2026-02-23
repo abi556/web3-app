@@ -1,28 +1,50 @@
 "use client";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { useState, useRef, useEffect, useSyncExternalStore } from "react";
-import { ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { ChevronDown, Copy, Check, LogOut } from "lucide-react";
+import { useHydrated } from "@/lib/useHydrated";
+import { truncateAddress } from "@/lib/format";
 
-const emptySubscribe = () => () => {};
-function useHydrated() {
-  return useSyncExternalStore(emptySubscribe, () => true, () => false);
-}
-
-function truncateAddress(address: string): string {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+function friendlyError(error: Error): string {
+  const msg = error.message.toLowerCase();
+  if (msg.includes("user rejected") || msg.includes("user denied")) {
+    return "Connection rejected";
+  }
+  if (msg.includes("not installed") || msg.includes("no provider")) {
+    return "Wallet not found — install MetaMask";
+  }
+  if (msg.includes("already pending")) {
+    return "Check your wallet for a pending request";
+  }
+  return "Connection failed — try again";
 }
 
 export function ConnectWalletButton() {
   const mounted = useHydrated();
-  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { address, isConnected, isConnecting, isReconnecting, chain } = useAccount();
+  const { connect, connectors, error: connectError, reset } = useConnect();
   const { disconnect } = useDisconnect();
 
   const [showConnectors, setShowConnectors] = useState(false);
   const [showDisconnect, setShowDisconnect] = useState(false);
+  const [copied, setCopied] = useState(false);
   const connectRef = useRef<HTMLDivElement>(null);
   const disconnectRef = useRef<HTMLDivElement>(null);
+
+  const copyAddress = useCallback(async () => {
+    if (!address) return;
+    await navigator.clipboard.writeText(address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [address]);
+
+  useEffect(() => {
+    if (!showConnectors && connectError) {
+      const timer = setTimeout(reset, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showConnectors, connectError, reset]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +71,7 @@ export function ConnectWalletButton() {
     };
   }, []);
 
-  if (!mounted || isConnecting || isReconnecting) {
+  if (!mounted || isReconnecting) {
     return (
       <button
         disabled
@@ -75,20 +97,43 @@ export function ConnectWalletButton() {
         </button>
 
         {showDisconnect && (
-          <div className="absolute right-0 mt-2 w-48 bg-background border border-accent/20 shadow-lg rounded-sm py-1 z-50">
-            <div className="px-4 py-2 text-xs text-foreground/50 border-b border-accent/10">
-              Connected
+          <div className="absolute right-0 mt-2 w-64 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50">
+            {/* Network */}
+            <div className="px-4 pb-2 mb-2 border-b border-accent/10">
+              <p className="text-[11px] uppercase tracking-wider text-foreground/40 font-bold mb-1">Network</p>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500" />
+                <span className="text-sm font-medium">{chain?.name ?? "Ethereum"}</span>
+              </div>
             </div>
-            <div className="px-4 py-2 text-xs text-foreground/70 font-mono">
-              {truncateAddress(address)}
+
+            {/* Address + Copy */}
+            <div className="px-4 pb-2 mb-2 border-b border-accent/10">
+              <p className="text-[11px] uppercase tracking-wider text-foreground/40 font-bold mb-1">Address</p>
+              <button
+                onClick={copyAddress}
+                className="flex items-center gap-2 w-full text-left group hover:bg-foreground/5 -mx-1 px-1 py-1 rounded transition-colors"
+              >
+                <span className="text-sm font-mono text-foreground/80 truncate">
+                  {address}
+                </span>
+                {copied ? (
+                  <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/60 shrink-0 transition-colors" />
+                )}
+              </button>
             </div>
+
+            {/* Disconnect */}
             <button
               onClick={() => {
                 disconnect();
                 setShowDisconnect(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-foreground/5 transition-colors"
+              className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-500/5 transition-colors"
             >
+              <LogOut className="w-4 h-4" />
               Disconnect
             </button>
           </div>
@@ -100,27 +145,41 @@ export function ConnectWalletButton() {
   return (
     <div className="relative" ref={connectRef}>
       <button
-        onClick={() => setShowConnectors(!showConnectors)}
-        className="px-6 py-2 border border-current rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm"
+        onClick={() => {
+          reset();
+          setShowConnectors(!showConnectors);
+        }}
+        disabled={isConnecting}
+        className={`px-6 py-2 border border-current rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm ${
+          isConnecting ? "animate-pulse opacity-70" : ""
+        }`}
         aria-label="Connect wallet"
         aria-expanded={showConnectors}
       >
-        Connect Wallet
+        {isConnecting ? "Connecting..." : "Connect Wallet"}
       </button>
 
       {showConnectors && (
-        <div className="absolute right-0 mt-2 w-56 bg-background border border-accent/20 shadow-lg rounded-sm py-1 z-50">
-          <div className="px-4 py-2 text-xs text-foreground/50 border-b border-accent/10">
+        <div className="absolute right-0 mt-2 w-56 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50">
+          <div className="px-4 py-1 text-xs text-foreground/50 border-b border-accent/10 pb-2 mb-1">
             Choose wallet
           </div>
+
+          {connectError && (
+            <div className="px-4 py-2 text-xs text-red-500 bg-red-500/5 border-b border-accent/10">
+              {friendlyError(connectError)}
+            </div>
+          )}
+
           {connectors.map((connector) => (
             <button
               key={connector.uid}
               onClick={() => {
+                reset();
                 connect({ connector });
-                setShowConnectors(false);
               }}
-              className="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-foreground/5 transition-colors"
+              disabled={isConnecting}
+              className="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-foreground/5 transition-colors disabled:opacity-50"
             >
               {connector.name}
             </button>

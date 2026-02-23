@@ -2,12 +2,8 @@
 
 import { useTheme } from "next-themes";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
-import { useEffect, useState, useRef, useSyncExternalStore } from "react";
-
-const emptySubscribe = () => () => {};
-function useHydrated() {
-  return useSyncExternalStore(emptySubscribe, () => true, () => false);
-}
+import { useEffect, useState, useRef } from "react";
+import { useHydrated } from "@/lib/useHydrated";
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -15,34 +11,25 @@ export function ThemeToggle() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close on click outside
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Close on Esc key
-  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsOpen(false);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen]);
@@ -58,7 +45,6 @@ export function ThemeToggle() {
     );
   }
 
-  // Determine icon to show based on resolved theme
   const Icon = resolvedTheme === "dark" ? Moon : Sun;
 
   return (
