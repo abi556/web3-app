@@ -1,35 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0A0A0A;
-  --color-foreground: #F5F5F0;
-  --color-accent: #64748B; /* slate-500 equivalent */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
   --font-heading: var(--font-playfair);
   --font-sans: var(--font-dm-sans);
 }
 
+/* Custom variant for dark mode using .dark class */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Default: Light Mode */
 :root {
-  --background: #0A0A0A;
-  --foreground: #F5F5F0;
+  --background: #F5F5F0;
+  --foreground: #0A0A0A;
   --accent: #64748B;
 }
 
+/* Dark Mode Override using html.dark for higher specificity */
+html.dark {
+  --background: #0A0A0A;
+  --foreground: #F5F5F0;
+  --accent: #94A3B8;
+}
+
 body {
-  @apply bg-background text-foreground font-sans antialiased;
+  @apply bg-background text-foreground font-sans antialiased transition-colors duration-300;
 }
 
 h1, h2, h3, h4, h5, h6 {
   @apply font-heading tracking-tight;
 }
 
-/* Base utility for sleek, high-contrast borders */
 .border-minimal {
   @apply border border-accent/20;
 }
 
-/* Button styles - minimal, high contrast */
 .btn-primary {
-  @apply bg-foreground text-background px-6 py-3 rounded-none font-medium transition-transform active:scale-[0.98];
+  @apply bg-foreground text-background px-6 py-3 rounded-none font-medium transition-transform active:scale-[0.98] border border-transparent hover:opacity-90;
 }
 
 .btn-outline {
