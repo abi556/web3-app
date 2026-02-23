@@ -1,6 +1,6 @@
 import { http, createConfig, fallback } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { injected, walletConnect, metaMask } from "wagmi/connectors";
+import { injected, walletConnect } from "wagmi/connectors";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY;
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
@@ -10,7 +10,6 @@ export const config = createConfig({
   connectors: [
     injected(),
     walletConnect({ projectId: walletConnectProjectId }),
-    metaMask(),
   ],
   transports: {
     [mainnet.id]: alchemyKey
