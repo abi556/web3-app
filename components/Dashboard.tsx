@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useAccount, useBalance, useReadContract } from "wagmi";
+import { useAccount, useBalance, useReadContract, useConnect } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { erc20Abi } from "viem";
 import { Wallet, ArrowUpRight, ArrowDownLeft, RefreshCcw, Send, AlertCircle, AlertTriangle, type LucideIcon } from "lucide-react";
@@ -36,6 +36,8 @@ function ActionButton({
 }
 
 function DisconnectedState() {
+  const { connect, connectors, isPending } = useConnect();
+
   return (
     <div className="border border-dashed border-accent/20 rounded-2xl p-8 md:p-12 flex flex-col items-center justify-center text-center bg-accent/5 min-h-[300px]">
       <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mb-6 text-accent">
@@ -45,9 +47,17 @@ function DisconnectedState() {
       <p className="text-foreground/60 max-w-sm mb-8 leading-relaxed">
         Connect your wallet to view your portfolio and manage your assets on the Ethereum Mainnet.
       </p>
-      <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 text-xs font-medium text-foreground/50">
-        <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-        Use the button in the top right
+      <div className="flex flex-wrap justify-center gap-3">
+        {connectors.map((connector) => (
+          <button
+            key={connector.uid}
+            onClick={() => connect({ connector })}
+            disabled={isPending}
+            className="px-5 py-2.5 border border-foreground/20 rounded-md text-sm font-medium hover:bg-foreground hover:text-background transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isPending ? "Connecting..." : connector.name}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -73,7 +83,7 @@ function BalanceError({ symbol, onRetry }: { symbol: string; onRetry?: () => voi
 function Toast({ message, visible }: { message: string; visible: boolean }) {
   if (!visible) return null;
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full shadow-lg fade-in-up">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full shadow-lg">
       {message}
     </div>
   );
@@ -169,7 +179,7 @@ export function Dashboard() {
 
   if (!isConnected) {
     return (
-      <section id="dashboard" aria-label="Wallet balances" className="mt-20 max-w-2xl mx-auto w-full fade-in-up">
+      <section id="dashboard" aria-label="Wallet balances" className="mt-20 max-w-2xl mx-auto w-full">
         <DisconnectedState />
       </section>
     );
@@ -177,7 +187,7 @@ export function Dashboard() {
 
   if (isWrongNetwork) {
     return (
-      <section id="dashboard" aria-label="Wrong network" className="mt-20 max-w-2xl mx-auto w-full fade-in-up">
+      <section id="dashboard" aria-label="Wrong network" className="mt-20 max-w-2xl mx-auto w-full">
         <WrongNetworkState />
       </section>
     );
@@ -192,7 +202,7 @@ export function Dashboard() {
     : undefined;
 
   return (
-    <section id="dashboard" className="mt-12 md:mt-20 max-w-md md:max-w-2xl mx-auto w-full fade-in-up px-4 md:px-0">
+    <section id="dashboard" className="mt-12 md:mt-20 max-w-md md:max-w-2xl mx-auto w-full px-4 md:px-0">
       <Toast message={toast ?? ""} visible={!!toast} />
 
       {/* Portfolio Header */}

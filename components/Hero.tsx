@@ -9,23 +9,14 @@ export function Hero() {
 
   return (
     <section className="min-h-[60vh] flex flex-col justify-center gap-6">
-      <h1
-        className="text-5xl md:text-7xl font-bold max-w-4xl leading-[1.1] fade-in-up"
-        style={{ animationDelay: "0ms" }}
-      >
+      <h1 className="text-5xl md:text-7xl font-bold max-w-3xl leading-[1.1]">
         The Future of <span className="text-accent">Web3</span> is Here.
       </h1>
-      <p
-        className="text-xl md:text-2xl text-foreground/80 max-w-2xl font-light fade-in-up"
-        style={{ animationDelay: "120ms" }}
-      >
+      <p className="text-xl md:text-2xl text-foreground/80 max-w-2xl font-light">
         A decentralized protocol for the next generation of finance. Secure,
         transparent, and built for everyone.
       </p>
-      <div
-        className="flex flex-wrap gap-4 mt-8 fade-in-up"
-        style={{ animationDelay: "240ms" }}
-      >
+      <div className="flex flex-wrap gap-4 mt-8">
         <button onClick={scrollToDashboard} className="btn-primary">
           Get Started
         </button>

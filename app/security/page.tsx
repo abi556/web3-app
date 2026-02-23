@@ -42,7 +42,7 @@ const principles = [
 
 export default function SecurityPage() {
   return (
-    <div className="max-w-4xl mx-auto w-full fade-in-up">
+    <div className="max-w-4xl mx-auto w-full">
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors mb-12"
