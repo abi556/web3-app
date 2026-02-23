@@ -25,6 +25,10 @@ html.dark {
   --accent: #94A3B8;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-background text-foreground font-sans antialiased transition-colors duration-300;
 }
@@ -33,16 +37,21 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-heading tracking-tight;
 }
 
+/* Skip to content — accessibility */
+.skip-to-content {
+  @apply absolute -top-12 left-4 z-[9999] bg-foreground text-background px-4 py-2 text-sm font-medium rounded-b-lg transition-all focus:top-0;
+}
+
 .border-minimal {
   @apply border border-accent/20;
 }
 
 .btn-primary {
-  @apply bg-foreground text-background px-6 py-3 rounded-none font-medium transition-transform active:scale-[0.98] border border-transparent hover:opacity-90;
+  @apply bg-foreground text-background px-6 py-3 rounded-md font-medium transition-all active:scale-[0.98] border border-transparent hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }
 
 .btn-outline {
-  @apply border border-foreground text-foreground px-6 py-3 rounded-none font-medium transition-colors hover:bg-foreground hover:text-background;
+  @apply border border-foreground text-foreground px-6 py-3 rounded-md font-medium transition-all hover:bg-foreground hover:text-background focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }
 
 @keyframes fade-in-up {

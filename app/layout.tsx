@@ -32,6 +32,9 @@ export default function RootLayout({
         className={`${playfair.variable} ${dmSans.variable} antialiased bg-background text-foreground font-sans min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <Providers
           attribute="class"
           defaultTheme="system"
@@ -41,7 +44,7 @@ export default function RootLayout({
           <header>
             <Navbar />
           </header>
-          <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-10 md:py-20">
+          <main id="main-content" className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-10 md:py-20">
             <ErrorBoundary>
               {children}
             </ErrorBoundary>

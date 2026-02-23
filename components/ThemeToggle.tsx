@@ -59,7 +59,7 @@ export function ThemeToggle() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-background border border-minimal shadow-lg rounded-sm py-1 z-50">
+        <div className="absolute right-0 mt-2 w-40 bg-background border border-accent/20 shadow-lg rounded-lg py-1 z-50">
           {[
             { value: "light", label: "Light", icon: Sun },
             { value: "dark", label: "Dark", icon: Moon },

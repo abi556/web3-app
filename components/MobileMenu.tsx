@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 
@@ -9,9 +10,9 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ links }: MobileMenuProps) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -34,9 +35,9 @@ export function MobileMenu({ links }: MobileMenuProps) {
         <Menu className="w-5 h-5" />
       </button>
 
-      {/* Overlay */}
+      {/* Overlay — solid bg, no glassmorphism */}
       <div
-        className={`fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setOpen(false)}
@@ -51,7 +52,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
       >
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-8">
-            <span className="text-lg font-heading font-bold">Menu</span>
+            <span className="text-lg font-heading font-bold">Web3.</span>
             <button
               onClick={() => setOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
@@ -61,20 +62,30 @@ export function MobileMenu({ links }: MobileMenuProps) {
             </button>
           </div>
 
-          <nav className="flex flex-col gap-2">
-            {links.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="group flex items-center justify-between p-3 rounded-lg hover:bg-foreground/5 transition-colors"
-                onClick={() => setOpen(false)}
-              >
-                <span className="text-base font-medium text-foreground/80 group-hover:text-foreground">
-                  {label}
-                </span>
-                <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-              </Link>
-            ))}
+          <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
+            {links.map(({ href, label }) => {
+              const isActive = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`group flex items-center justify-between p-3 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-foreground/5 text-foreground font-semibold"
+                      : "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
+                  }`}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <span className="text-base font-medium">{label}</span>
+                  {isActive ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                  ) : (
+                    <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="mt-auto pt-8 border-t border-accent/10">

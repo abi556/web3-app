@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectWalletButton } from "@/components/ConnectWalletButton";
 import { MobileMenu } from "@/components/MobileMenu";
@@ -12,6 +13,8 @@ const navLinks = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
+
   const allMobileLinks = [
     { href: "/", label: "Home" },
     ...navLinks,
@@ -31,15 +34,23 @@ export function Navbar() {
       </Link>
 
       <div className="hidden md:flex items-center gap-8 font-medium">
-        {navLinks.map(({ href, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className="text-foreground/60 hover:text-accent transition-colors"
-          >
-            {label}
-          </Link>
-        ))}
+        {navLinks.map(({ href, label }) => {
+          const isActive = pathname === href;
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`transition-colors ${
+                isActive
+                  ? "text-foreground font-semibold"
+                  : "text-foreground/60 hover:text-accent"
+              }`}
+              aria-current={isActive ? "page" : undefined}
+            >
+              {label}
+            </Link>
+          );
+        })}
       </div>
 
       <div className="flex items-center gap-4">
