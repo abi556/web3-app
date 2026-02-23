@@ -45,8 +45,8 @@ export function MobileMenu({ links }: MobileMenuProps) {
 
       {/* Side Panel */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-[300px] bg-background border-l border-accent/20 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
+        className={`fixed inset-y-0 left-0 z-50 w-full max-w-[300px] bg-background border-r border-accent/20 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
+          open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full p-6">

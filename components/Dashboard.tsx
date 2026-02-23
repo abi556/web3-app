@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAccount, useBalance, useReadContract } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { erc20Abi } from "viem";
-import { Wallet, ArrowUpRight, ArrowDownLeft, RefreshCcw, Send, AlertCircle, type LucideIcon } from "lucide-react";
+import { Wallet, ArrowUpRight, ArrowDownLeft, RefreshCcw, Send, AlertCircle, AlertTriangle, type LucideIcon } from "lucide-react";
 import { useHydrated } from "@/lib/useHydrated";
 import { formatBalance } from "@/lib/format";
 import { USDT_ADDRESS, USDT_DECIMALS } from "@/lib/contracts";
+
+const REFETCH_INTERVAL = 30_000; // 30 seconds
 
 function ActionButton({
   icon: Icon,
@@ -76,10 +79,46 @@ function Toast({ message, visible }: { message: string; visible: boolean }) {
   );
 }
 
+function WrongNetworkState() {
+  return (
+    <div className="border border-amber-500/20 rounded-2xl p-8 md:p-12 flex flex-col items-center justify-center text-center bg-amber-500/5 min-h-[300px]">
+      <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6">
+        <AlertTriangle className="w-8 h-8 text-amber-500" />
+      </div>
+      <h3 className="text-xl md:text-2xl font-bold mb-3 tracking-tight">Wrong Network</h3>
+      <p className="text-foreground/60 max-w-sm mb-4 leading-relaxed">
+        Your wallet is connected to an unsupported network. Switch to Ethereum Mainnet to view your balances.
+      </p>
+      <p className="text-xs text-foreground/40">
+        Use the wallet dropdown in the top right to switch networks
+      </p>
+    </div>
+  );
+}
+
+function useRelativeTime(timestamp: number | null) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 10_000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!timestamp) return null;
+
+  const seconds = Math.floor((now - timestamp) / 1000);
+  if (seconds < 10) return "just now";
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}m ago`;
+}
+
 export function Dashboard() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const mounted = useHydrated();
   const [toast, setToast] = useState<string | null>(null);
+
+  const isWrongNetwork = isConnected && chain?.id !== mainnet.id;
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -91,9 +130,13 @@ export function Dashboard() {
     isLoading: ethLoading,
     error: ethError,
     refetch: refetchEth,
+    dataUpdatedAt: ethUpdatedAt,
   } = useBalance({
     address,
-    query: { enabled: isConnected },
+    query: {
+      enabled: isConnected && !isWrongNetwork,
+      refetchInterval: REFETCH_INTERVAL,
+    },
   });
 
   const {
@@ -101,13 +144,26 @@ export function Dashboard() {
     isLoading: usdtLoading,
     error: usdtError,
     refetch: refetchUsdt,
+    dataUpdatedAt: usdtUpdatedAt,
   } = useReadContract({
     address: USDT_ADDRESS,
     abi: erc20Abi,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
-    query: { enabled: isConnected && !!address },
+    query: {
+      enabled: isConnected && !!address && !isWrongNetwork,
+      refetchInterval: REFETCH_INTERVAL,
+    },
   });
+
+  const lastUpdated = Math.max(ethUpdatedAt || 0, usdtUpdatedAt || 0) || null;
+  const relativeTime = useRelativeTime(lastUpdated);
+
+  const handleRefreshAll = useCallback(() => {
+    refetchEth();
+    refetchUsdt();
+    showToast("Refreshing balances...");
+  }, [refetchEth, refetchUsdt]);
 
   if (!mounted) return null;
 
@@ -115,6 +171,14 @@ export function Dashboard() {
     return (
       <section id="dashboard" aria-label="Wallet balances" className="mt-20 max-w-2xl mx-auto w-full fade-in-up">
         <DisconnectedState />
+      </section>
+    );
+  }
+
+  if (isWrongNetwork) {
+    return (
+      <section id="dashboard" aria-label="Wrong network" className="mt-20 max-w-2xl mx-auto w-full fade-in-up">
+        <WrongNetworkState />
       </section>
     );
   }
@@ -153,6 +217,20 @@ export function Dashboard() {
       <div className="bg-background border border-accent/10 rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5 dark:ring-white/5">
         <div className="px-6 py-4 border-b border-accent/10 bg-foreground/5 flex justify-between items-center">
           <h3 className="font-bold text-sm uppercase tracking-wider text-foreground/70">Assets</h3>
+          <div className="flex items-center gap-3">
+            {relativeTime && (
+              <span className="text-[11px] text-foreground/30 tabular-nums">
+                Updated {relativeTime}
+              </span>
+            )}
+            <button
+              onClick={handleRefreshAll}
+              className="p-1.5 rounded-md hover:bg-foreground/10 transition-colors group"
+              aria-label="Refresh balances"
+            >
+              <RefreshCcw className="w-3.5 h-3.5 text-foreground/40 group-hover:text-foreground transition-colors" />
+            </button>
+          </div>
         </div>
 
         <div className="divide-y divide-accent/5">

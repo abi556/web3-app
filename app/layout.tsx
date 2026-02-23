@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Providers } from "@/components/Providers";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -41,7 +42,9 @@ export default function RootLayout({
             <Navbar />
           </header>
           <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-10 md:py-20">
-            {children}
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
           </main>
           <Footer />
         </Providers>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ChevronDown, Copy, Check, LogOut } from "lucide-react";
+import { ChevronDown, Copy, Check, LogOut, AlertTriangle } from "lucide-react";
 import { useHydrated } from "@/lib/useHydrated";
 import { truncateAddress } from "@/lib/format";
 
@@ -20,6 +21,27 @@ function friendlyError(error: Error): string {
   return "Connection failed — try again";
 }
 
+function WrongNetworkBanner() {
+  const { switchChain, isPending } = useSwitchChain();
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm">
+      <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+      <div className="flex-1">
+        <p className="font-medium text-amber-600 dark:text-amber-400">Wrong network</p>
+        <p className="text-xs text-foreground/50">Switch to Ethereum Mainnet to view balances</p>
+      </div>
+      <button
+        onClick={() => switchChain({ chainId: mainnet.id })}
+        disabled={isPending}
+        className="px-3 py-1.5 text-xs font-medium bg-amber-500/20 hover:bg-amber-500/30 text-amber-600 dark:text-amber-400 rounded-md transition-colors disabled:opacity-50"
+      >
+        {isPending ? "Switching..." : "Switch"}
+      </button>
+    </div>
+  );
+}
+
 export function ConnectWalletButton() {
   const mounted = useHydrated();
   const { address, isConnected, isConnecting, isReconnecting, chain } = useAccount();
@@ -31,6 +53,8 @@ export function ConnectWalletButton() {
   const [copied, setCopied] = useState(false);
   const connectRef = useRef<HTMLDivElement>(null);
   const disconnectRef = useRef<HTMLDivElement>(null);
+
+  const isWrongNetwork = isConnected && chain?.id !== mainnet.id;
 
   const copyAddress = useCallback(async () => {
     if (!address) return;
@@ -87,23 +111,32 @@ export function ConnectWalletButton() {
       <div className="relative" ref={disconnectRef}>
         <button
           onClick={() => setShowDisconnect(!showDisconnect)}
-          className="flex items-center gap-2 px-5 py-2 border border-current rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm"
+          className={`flex items-center gap-2 px-5 py-2 border rounded-full hover:bg-foreground hover:text-background transition-colors font-medium text-sm ${
+            isWrongNetwork ? "border-amber-500 text-amber-500" : "border-current"
+          }`}
           aria-label="Wallet options"
           aria-expanded={showDisconnect}
         >
-          <span className="w-2 h-2 rounded-full bg-green-500" />
+          <span className={`w-2 h-2 rounded-full ${isWrongNetwork ? "bg-amber-500" : "bg-green-500"}`} />
           {truncateAddress(address)}
           <ChevronDown className="w-3 h-3" />
         </button>
 
         {showDisconnect && (
           <div className="absolute right-0 mt-2 w-64 bg-background border border-accent/20 shadow-lg rounded-lg py-2 z-50">
+            {/* Wrong Network Warning */}
+            {isWrongNetwork && (
+              <div className="px-3 pb-2 mb-2 border-b border-accent/10">
+                <WrongNetworkBanner />
+              </div>
+            )}
+
             {/* Network */}
             <div className="px-4 pb-2 mb-2 border-b border-accent/10">
               <p className="text-[11px] uppercase tracking-wider text-foreground/40 font-bold mb-1">Network</p>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                <span className="text-sm font-medium">{chain?.name ?? "Ethereum"}</span>
+                <span className={`w-2 h-2 rounded-full ${isWrongNetwork ? "bg-amber-500" : "bg-green-500"}`} />
+                <span className="text-sm font-medium">{chain?.name ?? "Unknown"}</span>
               </div>
             </div>
 
