@@ -35,7 +35,7 @@ export function Navbar() {
         href="/"
         className="hidden md:inline-block text-2xl font-heading font-bold tracking-tighter hover:opacity-70 transition-all duration-200"
       >
-        Web3.
+        Nexus.
       </Link>
 
       <div className="hidden md:flex items-center gap-8 font-medium">

@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Nexus Web3 Portfolio
 
-## Getting Started
+Professional Web3 landing page and asset manager built with **Next.js 16**, **React 19**, **TypeScript**, and **Tailwind CSS v4**.  
+Nexus allows you to securely connect your Ethereum wallets (MetaMask, browser wallets, WalletConnect), view live **ETH** and **USDT** balances on **Ethereum Mainnet**, and manage your decentralized finance portfolio in a clean, responsive dashboard.
 
-First, run the development server:
+## Features
+
+- **Wallet connection**
+  - Connect/disconnect via **Injected** wallets (e.g., MetaMask, Rabby, OKX, etc.)
+  - Connect via **WalletConnect v2** (QR code / mobile wallets)
+  - Clear connected / disconnected / wrong-network states
+- **Balance display**
+  - Live **ETH** balance on Ethereum Mainnet
+  - Live **USDT** balance on Ethereum Mainnet
+  - Uses `wagmi` + `viem` with `formatUnits` for precise formatting
+- **UI/UX**
+  - Modern, minimalist landing page with hero section and dashboard-style portfolio view
+  - Mobile‑first responsive layout, including a dedicated mobile navigation drawer
+  - Light/dark theme support with **`next-themes`**
+  - Micro‑interactions for buttons, cards, dropdowns, and toasts
+- **Error handling & resilience**
+  - Inline error messages for failed connections and network issues
+  - Global React **Error Boundary** to catch unexpected runtime errors
+  - Hydration safety via `useHydrated` and `suppressHydrationWarning`
+
+## Tech Stack
+
+- **Framework**: Next.js 16.1.6 (App Router, Turbopack)
+- **Language**: TypeScript
+- **UI**: React 19, Tailwind CSS v4
+- **Web3**: `wagmi`, `viem`, WalletConnect v2, Injected connectors
+- **State / Data**: React hooks, `@tanstack/react-query` for Web3 query caching
+- **Theming**: `next-themes` (light / dark / system)
+- **Icons**: `lucide-react` (tree‑shaken via `optimizePackageImports`)
+
+## Project Structure (high level)
+
+- `app/`
+  - `page.tsx` – Landing page (hero + dashboard)
+  - `about/page.tsx` – Project overview, FAQ, and explanation
+  - `features/page.tsx` – Product features
+  - `security/page.tsx` – Security and best‑practices overview
+  - `privacy/page.tsx` – Privacy policy
+  - `terms/page.tsx` – Terms of use
+  - `layout.tsx` – Root layout, fonts, metadata, global providers
+- `components/`
+  - `Navbar`, `MobileMenu`, `Footer`, `Hero`, `Dashboard`
+  - `ConnectWalletButton`, `ThemeToggle`, `ErrorBoundary`, `Providers`
+- `lib/`
+  - `wagmi.ts` – Wagmi + WalletConnect config
+  - `contracts.ts` – Contract constants (e.g., USDT address/decimals)
+  - `format.ts` – Formatting helpers (balances, addresses)
+  - `useHydrated.ts` – SSR hydration‑safe hook
+
+## Environment Variables
+
+Create a `.env.local` file in the project root with:
+
+```bash
+NEXT_PUBLIC_ALCHEMY_KEY=your_alchemy_mainnet_api_key
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+```
+
+- `NEXT_PUBLIC_ALCHEMY_KEY` is optional but recommended for reliable Ethereum Mainnet RPC.
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is required for WalletConnect v2.
+
+## Getting Started (Local Development)
+
+1. **Install dependencies**
+
+```bash
+npm install
+```
+
+2. **Run the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open `http://localhost:3000` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can then edit the UI (for example, the main landing page) in `app/page.tsx`. Changes are hot‑reloaded.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production Build
 
-## Learn More
+```bash
+npm run build
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Linting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project uses **ESLint 9** and Next.js recommended rules. Warnings about Tailwind v4 custom at‑rules are handled via workspace settings.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Live deployment**: [`https://web3-app-indol.vercel.app/`](https://web3-app-indol.vercel.app/)
+- The app is deployed via **Vercel** using the default Next.js build command (`npm run build`) and start command (`npm start`).
+- Any push to the main branch will trigger an automatic redeploy on Vercel (if connected to this repository).

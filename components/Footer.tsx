@@ -18,9 +18,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 mb-8">
           <div>
-            <p className="text-lg font-heading font-bold tracking-tighter mb-2">Web3.</p>
+            <p className="text-lg font-heading font-bold tracking-tighter mb-2">Nexus.</p>
             <p className="text-sm text-foreground/50 max-w-xs">
-              A decentralized protocol for the next generation of finance.
+              The most intuitive interface for managing your decentralized assets with total clarity.
             </p>
           </div>
 
@@ -58,7 +58,7 @@ export function Footer() {
         </div>
 
         <div className="pt-6 border-t border-accent/10 text-xs text-foreground/40">
-          <p suppressHydrationWarning>&copy; {new Date().getFullYear()} Web3 Protocol. All rights reserved.</p>
+          <p suppressHydrationWarning>&copy; {new Date().getFullYear()} Nexus Web3. All rights reserved.</p>
         </div>
       </div>
     </footer>

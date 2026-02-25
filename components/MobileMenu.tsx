@@ -52,7 +52,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
       >
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-8">
-            <span className="text-lg font-heading font-bold">Web3.</span>
+            <span className="text-lg font-heading font-bold">Nexus.</span>
             <button
               onClick={() => setOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
@@ -90,7 +90,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
 
           <div className="mt-auto pt-8 border-t border-accent/10">
             <p className="text-xs text-foreground/40 text-center" suppressHydrationWarning>
-              &copy; {new Date().getFullYear()} Web3 Protocol
+              &copy; {new Date().getFullYear()} Nexus Web3
             </p>
           </div>
         </div>

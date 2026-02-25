@@ -12,7 +12,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Default: Light Mode */
-:root {
+  :root {
   --background: #F5F5F0;
   --foreground: #0A0A0A;
   --accent: #64748B;
@@ -23,7 +23,7 @@ html.dark {
   --background: #0A0A0A;
   --foreground: #F5F5F0;
   --accent: #94A3B8;
-}
+  }
 
 html {
   scroll-behavior: smooth;
@@ -113,6 +113,11 @@ html.dark .card-interactive:hover {
 
 .spin-on-click:active svg {
   animation: spin-once 0.4s ease-out;
+}
+
+/* ── Text Glow ── */
+.text-glow {
+  text-shadow: 0 0 20px var(--accent);
 }
 
 /* ── Shared utilities ── */
