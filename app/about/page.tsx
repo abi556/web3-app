@@ -14,12 +14,12 @@ export default function AboutPage() {
 
       {/* Title */}
       <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6">
-        About <span className="text-accent">Web3.</span>
+        About <span className="text-accent">Nexus Web3</span>
       </h1>
       <p className="text-lg md:text-xl text-foreground/70 font-light leading-relaxed mb-16">
         A modern Web3 portfolio interface that lets you connect your Ethereum
-        wallet and view your on-chain balances — no sign-ups, no middlemen,
-        no custody risk.
+        wallet and view your on-chain balances with no sign-ups, no middlemen,
+        and no custody risk.
       </p>
 
       {/* What It Does */}
@@ -75,8 +75,8 @@ export default function AboutPage() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Why Web3?</h2>
         <div className="space-y-4 text-foreground/70 leading-relaxed">
           <p>
-            Traditional finance requires intermediaries — banks, brokers, and
-            custodians — each adding fees, delays, and counterparty risk.
+            Traditional finance requires intermediaries such as banks, brokers,
+            and custodians, each adding fees, delays, and counterparty risk.
             Web3 eliminates these layers by letting users interact directly
             with the blockchain.
           </p>
@@ -112,7 +112,7 @@ export default function AboutPage() {
             },
             {
               q: "Are the Send/Receive/Swap buttons functional?",
-              a: "Not yet — they are designed as a preview of the planned feature set. The current scope focuses on wallet connection and balance display.",
+              a: "Not yet. They are designed as a preview of the planned feature set. The current scope focuses on wallet connection and balance display.",
             },
           ].map(({ q, a }) => (
             <div key={q} className="border-b border-accent/10 pb-6">

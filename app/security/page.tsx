@@ -12,7 +12,7 @@ const principles = [
     icon: Eye,
     title: "Read-Only Access",
     description:
-      "We call two standard Ethereum JSON-RPC methods: eth_getBalance for native ETH, and a balanceOf view on the USDT contract. Both are read-only — no transactions are ever initiated.",
+      "We call two standard Ethereum JSON-RPC methods: eth_getBalance for native ETH, and a balanceOf view on the USDT contract. Both are strictly read-only and no transactions are ever initiated.",
   },
   {
     icon: Server,
@@ -30,7 +30,7 @@ const principles = [
     icon: FileCheck,
     title: "Open Source & Auditable",
     description:
-      "The entire codebase is available for review. Every dependency — wagmi, viem, next-themes — is a widely audited, open-source library maintained by the community.",
+      "The entire codebase is available for review. Every dependency, including wagmi, viem, and next-themes, is a widely audited, open-source library maintained by the community.",
   },
   {
     icon: ShieldCheck,
@@ -60,7 +60,7 @@ export default function SecurityPage() {
           Security
         </h1>
         <p className="text-lg md:text-xl text-foreground/60 font-light leading-relaxed max-w-2xl">
-          How we keep your assets safe — by never touching them in the first place.
+          How we keep your assets safe by never touching them in the first place.
         </p>
       </div>
 

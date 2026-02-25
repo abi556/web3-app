@@ -13,12 +13,12 @@ function friendlyError(error: Error): string {
     return "Connection rejected";
   }
   if (msg.includes("not installed") || msg.includes("no provider")) {
-    return "Wallet not found — install MetaMask";
+    return "Wallet not found. Please install MetaMask.";
   }
   if (msg.includes("already pending")) {
     return "Check your wallet for a pending request";
   }
-  return "Connection failed — try again";
+  return "Connection failed. Please try again.";
 }
 
 function WrongNetworkBanner() {

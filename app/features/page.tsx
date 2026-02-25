@@ -12,13 +12,13 @@ const features = [
     icon: BarChart3,
     title: "Real-Time Balances",
     description:
-      "View your native ETH and ERC-20 token balances read directly from Ethereum Mainnet — always accurate, always live.",
+      "View your native ETH and ERC-20 token balances read directly from Ethereum Mainnet, always accurate and always live.",
   },
   {
     icon: Shield,
     title: "Non-Custodial",
     description:
-      "Your private key never leaves your wallet. We only read public on-chain data — zero custody risk.",
+      "Your private key never leaves your wallet. We only read public on-chain data, which means zero custody risk.",
   },
   {
     icon: Zap,
@@ -30,7 +30,7 @@ const features = [
     icon: Globe,
     title: "Multi-Wallet Support",
     description:
-      "MetaMask, Coinbase Wallet, Brave Wallet, WalletConnect-compatible mobile wallets — connect however you prefer.",
+      "MetaMask, Coinbase Wallet, Brave Wallet, and WalletConnect-compatible mobile wallets, so you can connect however you prefer.",
   },
   {
     icon: Smartphone,
@@ -60,7 +60,7 @@ export default function FeaturesPage() {
           Features
         </h1>
         <p className="text-lg md:text-xl text-foreground/60 font-light leading-relaxed max-w-2xl">
-          Everything you need to view and manage your Ethereum portfolio —
+          Everything you need to view and manage your Ethereum portfolio and
           nothing you don&apos;t.
         </p>
       </div>

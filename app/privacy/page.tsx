@@ -30,7 +30,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-bold text-foreground mb-4">Overview</h2>
           <p>
-            Web3 Protocol (&quot;we&quot;, &quot;our&quot;, &quot;the app&quot;)
+            Nexus Web3 (&quot;we&quot;, &quot;our&quot;, &quot;the app&quot;)
             is a static, client-side web application. We are committed to
             protecting your privacy. This policy explains what data we collect
             (almost none) and how we handle it.
@@ -44,10 +44,10 @@ export default function PrivacyPage() {
           </h2>
           <ul className="space-y-3 pl-1">
             {[
-              "Private keys or seed phrases — we have no mechanism to access them",
-              "Personal information — no sign-ups, emails, or passwords",
-              "Transaction history — we only read current balances, not past activity",
-              "Cookies or tracking identifiers — we do not use analytics or ad tracking",
+              "Private keys or seed phrases; we have no mechanism to access them",
+              "Personal information; there are no sign-ups, emails, or passwords",
+              "Transaction history; we only read current balances, not past activity",
+              "Cookies or tracking identifiers; we do not use analytics or ad tracking",
             ].map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
@@ -68,9 +68,9 @@ export default function PrivacyPage() {
           </p>
           <ul className="space-y-3 pl-1">
             {[
-              "Your public wallet address — used to query on-chain balances",
-              "Network information — used to display the connected chain",
-              "Theme preference — stored in localStorage by your browser",
+              "Your public wallet address, used to query on-chain balances",
+              "Network information, used to display the connected chain",
+              "Theme preference, stored in localStorage by your browser",
             ].map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
@@ -97,11 +97,11 @@ export default function PrivacyPage() {
             {[
               {
                 name: "Alchemy",
-                desc: "Provides RPC node infrastructure for reading blockchain data. Alchemy may log RPC requests — see their privacy policy for details.",
+                desc: "Provides RPC node infrastructure for reading blockchain data. Alchemy may log RPC requests; see their privacy policy for details.",
               },
               {
                 name: "WalletConnect",
-                desc: "Provides the relay protocol for mobile wallet connections. WalletConnect operates its own relay servers — see their privacy policy.",
+                desc: "Provides the relay protocol for mobile wallet connections. WalletConnect operates its own relay servers; see their privacy policy.",
               },
               {
                 name: "Vercel",

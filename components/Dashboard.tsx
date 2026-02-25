@@ -216,16 +216,16 @@ export function Dashboard() {
         <p className="text-xs font-bold text-foreground/40 mb-3 uppercase tracking-[0.2em]">Portfolio</p>
         <div className="flex items-baseline justify-center gap-2">
           <h2 className="text-4xl md:text-6xl font-bold font-heading tracking-tighter tabular-nums">
-            {ethFormatted ?? "—"}
+            {ethFormatted ?? "0.0000"}
           </h2>
           <span className="text-lg md:text-xl text-foreground/40 font-medium">ETH</span>
         </div>
 
         <div className="flex justify-center gap-4 md:gap-8 mt-8 md:mt-10">
-          <ActionButton icon={ArrowDownLeft} label="Receive" onPress={() => showToast("Receive — coming soon")} />
-          <ActionButton icon={Send} label="Send" onPress={() => showToast("Send — coming soon")} />
-          <ActionButton icon={RefreshCcw} label="Swap" onPress={() => showToast("Swap — coming soon")} />
-          <ActionButton icon={ArrowUpRight} label="Buy" onPress={() => showToast("Buy — coming soon")} />
+          <ActionButton icon={ArrowDownLeft} label="Receive" onPress={() => showToast("Receive (coming soon)")} />
+          <ActionButton icon={Send} label="Send" onPress={() => showToast("Send (coming soon)")} />
+          <ActionButton icon={RefreshCcw} label="Swap" onPress={() => showToast("Swap (coming soon)")} />
+          <ActionButton icon={ArrowUpRight} label="Buy" onPress={() => showToast("Buy (coming soon)")} />
         </div>
       </div>
 

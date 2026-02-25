@@ -35,7 +35,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
         <Menu className="w-5 h-5" />
       </button>
 
-      {/* Overlay — solid bg, no glassmorphism */}
+      {/* Overlay: solid background, no glassmorphism */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
